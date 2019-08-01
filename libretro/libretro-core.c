@@ -89,6 +89,7 @@ extern int RETROUSERPORTJOY;
 extern int RETROEXTPAL;
 extern int RETROAUTOSTARTWARP;
 extern int RETROBORDERS;
+extern int RETROTHEME;
 extern char RETROEXTPALNAME[512];
 extern int retro_ui_finalized;
 extern unsigned int cur_port;
@@ -442,6 +443,10 @@ void retro_set_environment(retro_environment_t cb)
    struct retro_variable variables[] =
    {
       {
+         "vice_vkbd_theme",
+         "Virtual Keyboard Theme; classic|modern",
+      },
+      {
          "vice_statusbar",
          "Statusbar; disabled|enabled",
       },
@@ -620,6 +625,15 @@ static void update_variables(void)
 {
 
    struct retro_variable var;
+
+   var.key = "vice_vkbd_theme";
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+         if (strcmp(var.value, "classic") == 0)RETROTHEME=0;
+         if (strcmp(var.value, "modern") == 0)RETROTHEME=1;
+   }
 
    var.key = "vice_statusbar";
    var.value = NULL;
